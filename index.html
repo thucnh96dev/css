@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
+    <table>
+        <tr>
+            <th> <input type="text" name="sub1" id="sub1">  </th> 
+            <th><button type="button" id="vm_sub1">vmClick</button> </th>
+            <th><button type="button" id="run_sub1">runClick</button> </th>
+            <th><textarea id="text_vm_sub1" name="text_vm_sub1" rows="4" cols="40"></textarea></th>
+            <th><textarea id="text_runvm_sub1" name="text_runvm_sub1" rows="4" cols="40"></textarea></th>
+            <th><textarea id="text_runAllvm_sub1" name="text_runAllvm_sub1" rows="4" cols="40"></textarea></th>
+        </tr>
+        <tr>
+          <th><input type="text" name="sub2" id="sub2"/></th>
+          <th><button type="button" id="vm_sub2">vmClick</button></th>
+          <th><button type="button" id="run_sub2">runClick</button></th>
+          <th><textarea id="text_vm_sub2" name="text_vm_sub2" rows="4" cols="40"></textarea></th>
+          <th><textarea id="text_runvm_sub2" name="text_runvm_sub2" rows="4" cols="40"></textarea></th>
+          <th><textarea id="text_runAllvm_sub2" name="text_runAllvm_sub2" rows="4" cols="40"></textarea></th>  
+        </tr>
+        <tr>
+          <th><input type="text" name="sub3" id="sub3"></th>
+          <th><button type="button" id="vm_sub3">vmClick</button></th>
+          <th><button type="button" id="run_sub3">runClick</button></th>
+          <th><textarea id="text_vm_sub3" name="text_vm_sub3" rows="4" cols="40"></textarea></th>
+          <th><textarea id="text_runvm_sub3" name="text_runvm_sub3" rows="4" cols="40"></textarea></th>
+          <th><textarea id="text_runAllvm_sub3" name="text_runAllvm_sub3" rows="4" cols="40"></textarea></th>
+        </tr>
+      </table>
+
+
+      <table>
+        <tr>
+            <th><textarea id="text_create_vm_header" name="text_create_vm_header" rows="4" cols="40"></textarea></th>
+            <th><textarea id="text_run_vm_header" name="text_run_vm_header" rows="4" cols="40"></textarea></th>
+            <th><button type="button" id="mucnaoae">GenCode</button></th>
+        </tr>
+       
+      </table>
+      <script>
+        $(document).ready(function(){
+            $("#mucnaoae").click(function(){
+                generate()
+            });                
+        });
+
+        function generate(){
+            for (let i = 1; i <= 3; i++) {               
+                var idNext = '#sub'+i;
+                var vm_subNext = '#vm_sub'+i;
+                var vm_runNext = '#run_sub'+i;
+                var text_runvm_subNext = '#text_runAllvm_sub2'+i;
+
+                var subId = $(idNext).val();
+                var vm_subNextVal = $(vm_subNext).val();
+                var vm_runNextVal = $(vm_runNext).val();
+                var text_runvm_subNextVal = $(text_runvm_subNext).val();          
+                const refLocation = '"location":"eastus2","properties":{"computeType":"AmlCompute","computeLocation":"REGION","disableLocalAuth":false,"properties":{"vmSize":"Standard_NC4as_T4_v3","vmPriority":"LowPriority","scaleSettings":{"minNodeCount":1,"maxNodeCount":1,"nodeIdleTimeBeforeScaleDown":"PT120S"},"remoteLoginPortPublicAccess":"NotSpecified","userAccountCredentials":{"adminUserName":"azureuser","adminUserPassword":"$#@REWER453tre"}}}, \n';
+                const finalLocation = refLocation.replace('REGION','\"+regons[i]+\"');
+                const refProperties = '"referrer": "https://ml.azure.com/",\n'
+                                      + '"referrerPolicy": "strict-origin-when-cross-origin",\n'
+                                      + finalLocation
+                                      +'"method": "PUT",'
+                                      +'"mode": "cors",'
+                                      +'"credentials": "include"';
+
+                const header = $('#text_create_vm_header').val();
+
+                const textRegion = 'var regons = [\'eastus\',\'westus\',\'westus2\',\'eastus2\',\'westeurope\',\'uksouth\',\'southeastasia\',\'southcentralus\',\'northeurope\',\'koreacentral\',\'japaneast\',\'germanywestcentral\',\'centralindia\',\'brazilsouth\',\'australiaeast\']; \n';
+                const lengthregion = 'var arrayLength = regons.length; \n';
+                const headerFetch = 'fetch("https://management.azure.com/subscriptions/'+subId+'/resourceGroups/nnnnnn/providers/Microsoft.MachineLearningServices/workspaces/bbbbbb/computes/"+regons[i]+"?api-version=2021-07-01", { \n';
+                const fetchEnd = ' });\n';
+                const forStart = 'for (var i = 0; i < arrayLength; i++) { \n';
+                const forEnd = ' } \n';
+                var bodyStr = ` ${textRegion}\n ${lengthregion} ${forStart} \n  await ${headerFetch}\n ${header}, \n ${refProperties} \r ${fetchEnd} \n ${forEnd} \n`;
+                console.log(bodyStr);    
+                
+                $('#text_vm_sub'+i).val(bodyStr);
+        }
+        }
+    </script>
+</body>
+
+
+</html>
