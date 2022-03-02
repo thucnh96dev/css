@@ -35,29 +35,30 @@
         </tr>
       </table>
 
-
       <table>
         <tr>
             <th><textarea id="text_create_vm_header" name="text_create_vm_header" rows="4" cols="40"></textarea></th>
             <th><textarea id="text_run_vm_header" name="text_run_vm_header" rows="4" cols="40"></textarea></th>
-            <th><button type="button" id="mucnaoae">GenCode</button></th>
+            <th><button type="button" id="mucnaoae">GenVms</button></th>
+            <th><button type="button" id="mucnaoaerun">GenRun</button></th>
         </tr>
        
       </table>
       <script>
         $(document).ready(function(){
             $("#mucnaoae").click(function(){
-                generate()
-            });                
+                generateVM()
+            });   
+            $("#mucnaoaerun").click(function(){
+                generateRun()
+            });             
         });
-
-        function generate(){
+        function generateVM(){
             for (let i = 1; i <= 3; i++) {               
                 var idNext = '#sub'+i;
                 var vm_subNext = '#vm_sub'+i;
                 var vm_runNext = '#run_sub'+i;
                 var text_runvm_subNext = '#text_runAllvm_sub2'+i;
-
                 var subId = $(idNext).val();
                 var vm_subNextVal = $(vm_subNext).val();
                 var vm_runNextVal = $(vm_runNext).val();
@@ -70,20 +71,39 @@
                                       +'"method": "PUT",'
                                       +'"mode": "cors",'
                                       +'"credentials": "include"';
-
                 const header = $('#text_create_vm_header').val();
-
                 const textRegion = 'var regons = [\'eastus\',\'westus\',\'westus2\',\'eastus2\',\'westeurope\',\'uksouth\',\'southeastasia\',\'southcentralus\',\'northeurope\',\'koreacentral\',\'japaneast\',\'germanywestcentral\',\'centralindia\',\'brazilsouth\',\'australiaeast\']; \n';
                 const lengthregion = 'var arrayLength = regons.length; \n';
                 const headerFetch = 'fetch("https://management.azure.com/subscriptions/'+subId+'/resourceGroups/nnnnnn/providers/Microsoft.MachineLearningServices/workspaces/bbbbbb/computes/"+regons[i]+"?api-version=2021-07-01", { \n';
                 const fetchEnd = ' });\n';
                 const forStart = 'for (var i = 0; i < arrayLength; i++) { \n';
                 const forEnd = ' } \n';
-                var bodyStr = ` ${textRegion}\n ${lengthregion} ${forStart} \n  await ${headerFetch}\n ${header}, \n ${refProperties} \r ${fetchEnd} \n ${forEnd} \n`;
-                console.log(bodyStr);    
-                
+                var bodyStr = ` ${textRegion}\n ${lengthregion} ${forStart} \n await ${headerFetch}\n ${header}, \n ${refProperties} \r ${fetchEnd} \n ${forEnd} \n`;
+                console.log(bodyStr);                  
                 $('#text_vm_sub'+i).val(bodyStr);
         }
+        }
+
+        function generateRun(){
+            for (let i = 1; i <= 3; i++) { 
+                var idNext = '#sub'+i;
+                var vm_subNext = '#vm_sub'+i;
+                var vm_runNext = '#run_sub'+i;
+                var text_runvm_subNext = '#text_runAllvm_sub2'+i;
+                var subId = $(idNext).val();
+                var vm_subNextVal = $(vm_subNext).val();
+                var vm_runNextVal = $(vm_runNext).val();
+                var text_runvm_subNextVal = $(text_runvm_subNext).val();
+                const textRegion = 'var regons = [\'eastus\',\'westus\',\'westus2\',\'eastus2\',\'westeurope\',\'uksouth\',\'southeastasia\',\'southcentralus\',\'northeurope\',\'koreacentral\',\'japaneast\',\'germanywestcentral\',\'centralindia\',\'brazilsouth\',\'australiaeast\']; \n';
+                const lengthregion = 'var arrayLength = regons.length; \n';
+                const forStart = 'for (var i = 0; i < arrayLength; i++) { \n';
+                const forEnd = ' } \n';
+
+                const header = $('#text_run_vm_header').val();
+
+
+            }
+
         }
     </script>
 </body>
